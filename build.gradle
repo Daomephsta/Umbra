@@ -1,0 +1,62 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url = "http://files.minecraftforge.net/maven" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven-publish'
+
+version = project.mcVersion + "-" + project.modVersion
+group = "daomephsta.umbra" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "Umbra"
+
+sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
+
+minecraft {
+    version = project.mcVersion + "-" + project.forgeVersion
+    runDir = "run"
+    mappings = project.mappingsVer
+    makeObfSourceJar = false
+}
+
+repositories {
+	jcenter()
+}
+
+dependencies {
+	testImplementation 'junit:junit:4.12'
+}
+
+publishing {
+	publications {
+		umbra(MavenPublication) {
+			from components.java
+		}
+	}
+}
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else except the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
