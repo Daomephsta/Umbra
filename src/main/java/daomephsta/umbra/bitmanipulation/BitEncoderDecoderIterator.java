@@ -21,6 +21,6 @@ class BitEncoderDecoderIterator implements OfInt
 	@Override
 	public int nextInt()
 	{
-		return bitEncoderDecoder.getInt(++cursor);
+		return bitEncoderDecoder.decode(++cursor);
 	}
 }
