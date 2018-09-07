@@ -7,15 +7,18 @@ import com.google.common.math.IntMath;
 
 class BitEncoderDecoderDynamicBitCount implements IBitEncoderDecoder
 {
+	private static final int DEFAULT_BIT_COUNT = 8;
 	private final BitSet bits;
+	private int bitCount;
 	
 	BitEncoderDecoderDynamicBitCount()
 	{
-		this.bits = new BitSet();
+		this(DEFAULT_BIT_COUNT);
 	}
 	
 	BitEncoderDecoderDynamicBitCount(int initialBitCount)
 	{
+		this.bitCount = initialBitCount;
 		this.bits = new BitSet(initialBitCount);
 	}
 
@@ -28,12 +31,13 @@ class BitEncoderDecoderDynamicBitCount implements IBitEncoderDecoder
 	@Override
 	public void encode(int fromIndex, int toIndex, int value)
 	{
-		int maxStorableValue = IntMath.pow(2, toIndex - fromIndex) - 1;
-		if (value > maxStorableValue) 
+		int quotient = value;
+		int bitIndex = toIndex - 1;
+		while (quotient != 0)
 		{
-			throw new IllegalArgumentException(String.format(
-			"%d is larger than %d, the largest integer that can be stored in %d bits", 
-			value, maxStorableValue, toIndex - fromIndex));
+			set(bitIndex--, quotient % 2 == 1);
+	        // This is supposed to be integer division
+	        quotient = quotient / 2;
 		}
 	}
 	
@@ -49,10 +53,10 @@ class BitEncoderDecoderDynamicBitCount implements IBitEncoderDecoder
 		int result = 0;
 		for(int i = fromIndex; i < toIndex; i++)
 		{
-			if (bits.get(i))
-				result += IntMath.pow(2, i);
+			if (get(i))
+				result += IntMath.pow(2, toIndex - i - 1);
 		}
-		return result >> fromIndex;
+		return result;
 	}
 
 	@Override
@@ -82,25 +86,27 @@ class BitEncoderDecoderDynamicBitCount implements IBitEncoderDecoder
 	@Override
 	public void set(int bitIndex)
 	{
-		bits.set(bitIndex);
+		set(bitIndex, true);
 	}
 
 	@Override
 	public void set(int bitIndex, boolean value)
 	{
 		bits.set(bitIndex, value);
+		if (bitIndex > size()) bitCount = bitIndex;
 	}
 
 	@Override
 	public void set(int fromIndex, int toIndex)
 	{
-		bits.set(fromIndex, toIndex);
+		set(fromIndex, toIndex, true);
 	}
 
 	@Override
 	public void set(int fromIndex, int toIndex, boolean value)
 	{
 		bits.set(fromIndex, toIndex, value);
+		if (toIndex > size()) bitCount = toIndex;
 	}
 
 	@Override
@@ -124,6 +130,8 @@ class BitEncoderDecoderDynamicBitCount implements IBitEncoderDecoder
 	@Override
 	public boolean get(int bitIndex)
 	{
+		if (bitIndex >= size()) throw new IndexOutOfBoundsException(String.format("Bit index is too large. Index: %d Size: %d", 
+			bitIndex, size()));
 		return bits.get(bitIndex);
 	}
 
@@ -148,7 +156,7 @@ class BitEncoderDecoderDynamicBitCount implements IBitEncoderDecoder
 	@Override
 	public int size()
 	{
-		return bits.size();
+		return bitCount;
 	}
 
 	@Override
@@ -160,7 +168,12 @@ class BitEncoderDecoderDynamicBitCount implements IBitEncoderDecoder
 	@Override
 	public String toString()
 	{
-		return bits.toString();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < size(); i++)
+		{
+			sb.append(get(i) ? 1 : 0);
+		}
+		return sb.toString();
 	}
 
 	@Override
