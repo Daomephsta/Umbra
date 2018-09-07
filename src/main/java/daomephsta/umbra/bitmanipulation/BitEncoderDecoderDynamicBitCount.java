@@ -9,24 +9,24 @@ class BitEncoderDecoderDynamicBitCount implements IBitEncoderDecoder
 {
 	private final BitSet bits;
 	
-	public BitEncoderDecoderDynamicBitCount()
+	BitEncoderDecoderDynamicBitCount()
 	{
 		this.bits = new BitSet();
 	}
 	
-	public BitEncoderDecoderDynamicBitCount(int initialBitCount)
+	BitEncoderDecoderDynamicBitCount(int initialBitCount)
 	{
 		this.bits = new BitSet(initialBitCount);
 	}
 
 	@Override
-	public void encode(long value)
+	public void encode(int value)
 	{
 		encode(0, size(), value);
 	}
 	
 	@Override
-	public void encode(int fromIndex, int toIndex, long value)
+	public void encode(int fromIndex, int toIndex, int value)
 	{
 		int maxStorableValue = IntMath.pow(2, toIndex - fromIndex) - 1;
 		if (value > maxStorableValue) 
@@ -40,7 +40,7 @@ class BitEncoderDecoderDynamicBitCount implements IBitEncoderDecoder
 	@Override
 	public int decode()
 	{
-		return decode(0, length());
+		return decode(0, size());
 	}
 	
 	@Override
@@ -128,81 +128,15 @@ class BitEncoderDecoderDynamicBitCount implements IBitEncoderDecoder
 	}
 
 	@Override
-	public BitSet get(int fromIndex, int toIndex)
-	{
-		return bits.get(fromIndex, toIndex);
-	}
-
-	@Override
-	public int nextSetBit(int fromIndex)
-	{
-		return bits.nextSetBit(fromIndex);
-	}
-
-	@Override
-	public int nextClearBit(int fromIndex)
-	{
-		return bits.nextClearBit(fromIndex);
-	}
-
-	@Override
-	public int previousSetBit(int fromIndex)
-	{
-		return bits.previousSetBit(fromIndex);
-	}
-
-	@Override
-	public int previousClearBit(int fromIndex)
-	{
-		return bits.previousClearBit(fromIndex);
-	}
-
-	@Override
-	public int length()
-	{
-		return bits.length();
-	}
-
-	@Override
 	public boolean isEmpty()
 	{
 		return bits.isEmpty();
 	}
 
 	@Override
-	public boolean intersects(BitSet set)
-	{
-		return bits.intersects(set);
-	}
-
-	@Override
 	public int cardinality()
 	{
 		return bits.cardinality();
-	}
-
-	@Override
-	public void and(BitSet set)
-	{
-		bits.and(set);
-	}
-
-	@Override
-	public void or(BitSet set)
-	{
-		bits.or(set);
-	}
-
-	@Override
-	public void xor(BitSet set)
-	{
-		bits.xor(set);
-	}
-
-	@Override
-	public void andNot(BitSet set)
-	{
-		bits.andNot(set);
 	}
 
 	@Override
@@ -232,6 +166,6 @@ class BitEncoderDecoderDynamicBitCount implements IBitEncoderDecoder
 	@Override
 	public IntStream stream()
 	{
-		return bits.stream();
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 }

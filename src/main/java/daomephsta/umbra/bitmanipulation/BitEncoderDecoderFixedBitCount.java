@@ -8,20 +8,22 @@ import com.google.common.math.IntMath;
 class BitEncoderDecoderFixedBitCount implements IBitEncoderDecoder
 {
 	private final BitSet bits;
+	private final int bitCount;
 	
-	public BitEncoderDecoderFixedBitCount(int bitCount)
+	BitEncoderDecoderFixedBitCount(int bitCount)
 	{
+		this.bitCount = bitCount;
 		this.bits = new BitSet(bitCount);
 	}
 	
 	@Override
-	public void encode(long value)
+	public void encode(int value)
 	{
-		encode(0, size(), value);
+		encode(0, bitCount, value);
 	}
 	
 	@Override
-	public void encode(int fromIndex, int toIndex, long value)
+	public void encode(int fromIndex, int toIndex, int value)
 	{
 		int maxStorableValue = IntMath.pow(2, toIndex - fromIndex) - 1;
 		if (value > maxStorableValue) 
@@ -30,12 +32,20 @@ class BitEncoderDecoderFixedBitCount implements IBitEncoderDecoder
 			"%d is larger than %d, the largest integer that can be stored in %d bits", 
 			value, maxStorableValue, toIndex - fromIndex));
 		}
+		int quotient = value;
+		int bitIndex = toIndex - 1;
+		while (quotient != 0)
+		{
+			bits.set(bitIndex--, quotient % 2 == 1);
+	        // This is supposed to be integer division
+	        quotient = quotient / 2;
+		}
 	}
 	
 	@Override
 	public int decode()
 	{
-		return decode(0, length());
+		return decode(0, bitCount);
 	}
 	
 	@Override
@@ -45,9 +55,9 @@ class BitEncoderDecoderFixedBitCount implements IBitEncoderDecoder
 		for(int i = fromIndex; i < toIndex; i++)
 		{
 			if (bits.get(i))
-				result += IntMath.pow(2, i);
+				result += IntMath.pow(2, toIndex - i - 1);
 		}
-		return result >> fromIndex;
+		return result;
 	}
 
 	@Override
@@ -123,81 +133,15 @@ class BitEncoderDecoderFixedBitCount implements IBitEncoderDecoder
 	}
 
 	@Override
-	public BitSet get(int fromIndex, int toIndex)
-	{
-		return bits.get(fromIndex, toIndex);
-	}
-
-	@Override
-	public int nextSetBit(int fromIndex)
-	{
-		return bits.nextSetBit(fromIndex);
-	}
-
-	@Override
-	public int nextClearBit(int fromIndex)
-	{
-		return bits.nextClearBit(fromIndex);
-	}
-
-	@Override
-	public int previousSetBit(int fromIndex)
-	{
-		return bits.previousSetBit(fromIndex);
-	}
-
-	@Override
-	public int previousClearBit(int fromIndex)
-	{
-		return bits.previousClearBit(fromIndex);
-	}
-
-	@Override
-	public int length()
-	{
-		return bits.length();
-	}
-
-	@Override
 	public boolean isEmpty()
 	{
 		return bits.isEmpty();
 	}
 
 	@Override
-	public boolean intersects(BitSet set)
-	{
-		return bits.intersects(set);
-	}
-
-	@Override
 	public int cardinality()
 	{
 		return bits.cardinality();
-	}
-
-	@Override
-	public void and(BitSet set)
-	{
-		bits.and(set);
-	}
-
-	@Override
-	public void or(BitSet set)
-	{
-		bits.or(set);
-	}
-
-	@Override
-	public void xor(BitSet set)
-	{
-		bits.xor(set);
-	}
-
-	@Override
-	public void andNot(BitSet set)
-	{
-		bits.andNot(set);
 	}
 
 	@Override
@@ -209,7 +153,7 @@ class BitEncoderDecoderFixedBitCount implements IBitEncoderDecoder
 	@Override
 	public int size()
 	{
-		return bits.size();
+		return bitCount;
 	}
 
 	@Override
@@ -221,12 +165,17 @@ class BitEncoderDecoderFixedBitCount implements IBitEncoderDecoder
 	@Override
 	public String toString()
 	{
-		return bits.toString();
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < size(); i++)
+		{
+			sb.append(get(i) ? 1 : 0);
+		}
+		return sb.toString();
 	}
 
 	@Override
 	public IntStream stream()
 	{
-		return bits.stream();
+		throw new UnsupportedOperationException("Not implemented yet");
 	}
 }

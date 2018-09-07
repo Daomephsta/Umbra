@@ -1,6 +1,5 @@
 package daomephsta.umbra.bitmanipulation;
 
-import java.util.BitSet;
 import java.util.stream.IntStream;
 
 public interface IBitEncoderDecoder
@@ -20,9 +19,9 @@ public interface IBitEncoderDecoder
 		return new BitEncoderDecoderDynamicBitCount(initialBitCount);
 	}
 	
-	public void encode(long value);
+	public void encode(int value);
 	
-	public void encode(int fromIndex, int toIndex, long value);
+	public void encode(int fromIndex, int toIndex, int value);
 	
 	public int decode();
 	
@@ -52,31 +51,9 @@ public interface IBitEncoderDecoder
 
 	public boolean get(int bitIndex);
 
-	public BitSet get(int fromIndex, int toIndex);
-
-	public int nextSetBit(int fromIndex);
-
-	public int nextClearBit(int fromIndex);
-
-	public int previousSetBit(int fromIndex);
-
-	public int previousClearBit(int fromIndex);
-
-	public int length();
-
 	public boolean isEmpty();
 
-	public boolean intersects(BitSet set);
-
 	public int cardinality();
-
-	public void and(BitSet set);
-
-	public void or(BitSet set);
-
-	public void xor(BitSet set);
-
-	public void andNot(BitSet set);
 
 	public int size();
 
