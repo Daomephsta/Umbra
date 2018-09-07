@@ -1,8 +1,11 @@
 package daomephsta.umbra.test.bitshifting;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+import java.util.PrimitiveIterator;
 import java.util.stream.IntStream;
 
 import org.junit.Test;
@@ -73,5 +76,24 @@ public class BitEncoderDecoderFixedBitCountTest
 					bitEncoderDecoder.getClass().getSimpleName(), testInt), testInt, bitEncoderDecoder.decode(FROM, TO));
 			}
 		}
+	}
+	
+	@Test
+	public void testIterator()
+	{
+		IBitEncoderDecoder bitEncoderDecoder = IBitEncoderDecoder.fixedBitCount(4);
+		bitEncoderDecoder.set(0);
+		bitEncoderDecoder.set(3);
+		
+		int[] actual = new int[bitEncoderDecoder.size()];
+		PrimitiveIterator.OfInt iter = bitEncoderDecoder.iterator();
+		for (int i = 0; i < bitEncoderDecoder.size(); i++)
+		{
+			actual[i] = iter.nextInt();
+		}
+		int[] expected = {1, 0, 0, 1};
+		assertArrayEquals(String.format("The iterator %s did not produce the expected integers %s", 
+			iter.getClass().getSimpleName(), Arrays.toString(expected)), expected, actual);
+		
 	}
 }

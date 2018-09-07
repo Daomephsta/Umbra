@@ -1,6 +1,7 @@
 package daomephsta.umbra.bitmanipulation;
 
 import java.util.BitSet;
+import java.util.PrimitiveIterator;
 import java.util.stream.IntStream;
 
 import com.google.common.math.IntMath;
@@ -173,6 +174,12 @@ class BitEncoderDecoderFixedBitCount implements IBitEncoderDecoder
 		return sb.toString();
 	}
 
+	@Override
+	public PrimitiveIterator.OfInt iterator()
+	{
+		return new BitEncoderDecoderIterator(this);
+	}
+	
 	@Override
 	public IntStream stream()
 	{

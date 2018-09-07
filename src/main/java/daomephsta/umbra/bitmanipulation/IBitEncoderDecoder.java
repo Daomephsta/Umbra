@@ -1,8 +1,9 @@
 package daomephsta.umbra.bitmanipulation;
 
+import java.util.PrimitiveIterator;
 import java.util.stream.IntStream;
 
-public interface IBitEncoderDecoder
+public interface IBitEncoderDecoder extends Iterable<Integer>
 {
 	public static IBitEncoderDecoder fixedBitCount(int bitCount)
 	{
@@ -38,10 +39,40 @@ public interface IBitEncoderDecoder
 	public void set(int bitIndex);
 
 	public void set(int bitIndex, boolean value);
+	
+	public default void setInt(int bitIndex, int value) 
+	{
+		switch (value)
+		{
+		case 0:
+			set(bitIndex, false);
+			break;
+		case 1:
+			set(bitIndex, true);
+			break;
+		default:
+			throw new IllegalArgumentException("value must be 0 or 1");
+		}
+	}
 
 	public void set(int fromIndex, int toIndex);
 
 	public void set(int fromIndex, int toIndex, boolean value);
+	
+	public default void setInt(int fromIndex, int toIndex, int value) 
+	{
+		switch (value)
+		{
+		case 0:
+			set(fromIndex, toIndex, false);
+			break;
+		case 1:
+			set(fromIndex, toIndex, true);
+			break;
+		default:
+			throw new IllegalArgumentException("value must be 0 or 1");
+		}
+	}
 
 	public void clear(int bitIndex);
 
@@ -50,12 +81,17 @@ public interface IBitEncoderDecoder
 	public void clear();
 
 	public boolean get(int bitIndex);
+	
+	public default int getInt(int bitIndex) {return get(bitIndex) ? 1 : 0;}
 
 	public boolean isEmpty();
 
 	public int cardinality();
 
 	public int size();
-
+	
+	@Override
+	public PrimitiveIterator.OfInt iterator();
+	
 	public IntStream stream();
 }
