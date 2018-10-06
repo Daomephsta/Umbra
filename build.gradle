@@ -13,6 +13,9 @@ apply plugin: 'maven-publish'
 version = project.mcVersion + "-" + project.modVersion
 group = "daomephsta.umbra" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Umbra"
+//Disable run configuration generation
+makeEclipseCleanRunClient.enabled = false
+makeEclipseCleanRunServer.enabled = false
 
 sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 compileJava {
@@ -32,12 +35,33 @@ repositories {
 
 dependencies {
 	testImplementation 'junit:junit:4.12'
+	compileOnly 'com.google.auto.service:auto-service:1.0-rc4'
+	annotationProcessor 'com.google.auto.service:auto-service:1.0-rc4'
+}
+
+sourceSets {
+	annotationProcessing {
+		java {
+			srcDir 'src/annotation-processing/java'
+			filter.include '**/*.template'
+		}
+		resources {
+			srcDir 'src/annotation-processing/resources'
+		}
+		compileClasspath += sourceSets.main.runtimeClasspath
+	}
+}
+
+task annotationProcessingJar(type: Jar) {
+	from sourceSets.annotationProcessing.output
+	classifier = 'annotation-processing'
 }
 
 publishing {
 	publications {
 		umbra(MavenPublication) {
-			from components.java
+			artifact jar
+			artifact source: annotationProcessingJar, classifier: 'annotation'
 		}
 	}
 }
