@@ -1,4 +1,4 @@
-package daomephsta.umbra.modelgen.annotations;
+package daomephsta.umbra.annotationprocessing.annotations.modelgen;
 
 import java.lang.annotation.*;
 

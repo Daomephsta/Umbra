@@ -1,0 +1,47 @@
+// For those who want the bleeding edge
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+//Disable run configuration generation, as Umbra is a library, not a mod
+makeEclipseCleanRunClient.enabled = false
+makeEclipseCleanRunServer.enabled = false
+version = "${rootProject.mcVersion}-${rootProject.projectVersion}"
+archivesBaseName = 'umbra-minecraft'
+
+minecraft {
+	version = rootProject.mcVersion + "-" + rootProject.forgeVersion
+	runDir = "run"
+	mappings = rootProject.mappingsVer
+	makeObfSourceJar = false
+}
+
+processResources
+{
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        // replace version and mcversion
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}

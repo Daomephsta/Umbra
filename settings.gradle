@@ -1,1 +1,5 @@
-rootProject.name = 'Umbra'
+rootProject.name = 'umbra'
+include 'umbra-annotations'
+include 'umbra-java'
+include 'umbra-minecraft'
+include 'umbra-test'

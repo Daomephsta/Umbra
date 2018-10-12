@@ -1,4 +1,4 @@
-package daomephsta.umbra.modelgen;
+package daomephsta.umbra.annotationprocessing.processors.modelgen;
 
 import java.io.*;
 import java.util.*;

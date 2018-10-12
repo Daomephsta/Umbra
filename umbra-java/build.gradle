@@ -1,0 +1,10 @@
+version = rootProject.projectVersion
+archivesBaseName = 'umbra-java'
+	
+repositories {
+	jcenter()
+}
+
+dependencies {
+	implementation 'com.google.guava:guava:26.0-jre'
+}

@@ -1,86 +1,11 @@
-buildscript {
-    repositories {
-        jcenter()
-        maven { url = "http://files.minecraftforge.net/maven" }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-    }
-}
-apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven-publish'
 
-version = project.mcVersion + "-" + project.modVersion
-group = "daomephsta.umbra" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "Umbra"
-//Disable run configuration generation
-makeEclipseCleanRunClient.enabled = false
-makeEclipseCleanRunServer.enabled = false
+subprojects {
+	apply plugin: 'java'
 
-sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
-
-minecraft {
-    version = project.mcVersion + "-" + project.forgeVersion
-    runDir = "run"
-    mappings = project.mappingsVer
-    makeObfSourceJar = false
-}
-
-repositories {
-	jcenter()
-}
-
-dependencies {
-	testImplementation 'junit:junit:4.12'
-	compileOnly 'com.google.auto.service:auto-service:1.0-rc4'
-	annotationProcessor 'com.google.auto.service:auto-service:1.0-rc4'
-}
-
-sourceSets {
-	annotationProcessing {
-		java {
-			srcDir 'src/annotation-processing/java'
-			filter.include '**/*.template'
-		}
-		resources {
-			srcDir 'src/annotation-processing/resources'
-		}
-		compileClasspath += sourceSets.main.runtimeClasspath
+	sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+	compileJava {
+		sourceCompatibility = targetCompatibility = '1.8'
 	}
-}
-
-task annotationProcessingJar(type: Jar) {
-	from sourceSets.annotationProcessing.output
-	classifier = 'annotation-processing'
-}
-
-publishing {
-	publications {
-		umbra(MavenPublication) {
-			artifact jar
-			artifact source: annotationProcessingJar, classifier: 'annotation'
-		}
-	}
-}
-
-processResources {
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-                
-        // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-        
-    // copy everything else except the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
+	group = "daomephsta.umbra" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 }
