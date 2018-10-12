@@ -24,7 +24,7 @@ import net.minecraftforge.fml.common.*;
 //TODO Deprecate in 1.13
 public class FunctionLoader
 {
-	private static final Logger logger = LogManager.getLogger(FunctionLoader.class.getSimpleName());
+	private static final Logger logger = LogManager.getLogger(FunctionLoader.class);
 	
 	public static void loadFunctionsFor(MinecraftServer server, String modid)
 	{
