@@ -1,4 +1,3 @@
-version = rootProject.projectVersion
 archivesBaseName = 'umbra-java'
 	
 repositories {
