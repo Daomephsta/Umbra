@@ -1,41 +1,13 @@
-apply plugin: 'maven-publish'
-
 allprojects {
 	group = 'daomephsta.umbra' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 }
 
 subprojects {
 	apply plugin: 'java'
+    apply plugin: 'maven-publish'
 
 	sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 	compileJava {
 		sourceCompatibility = targetCompatibility = '1.8'
-	}
-}
-
-publishing {
-	publications {
-		def forProject = {projectName, classifierIn, configuration ->
-			def pub = create(projectName, MavenPublication, configuration) 
-			pub.artifact project(":${projectName}").jar
-			pub.artifactId projectName
-			pub.version = project(projectName).version
-		}
-		create('umbra-annotations', MavenPublication) {
-			artifact project(':umbra-annotations').annotationsJar
-			version = project(':umbra-annotations').version
-			artifactId 'umbra-annotations'
-		}
-		create('umbra-annotation-processing', MavenPublication) {
-			artifact project(':umbra-annotations').processorsJar
-			version = project(':umbra-annotations').version
-			artifactId 'umbra-annotation-processing'
-		}
-		forProject('umbra-java', 'java') {
-			artifactId 'umbra-java'
-		}
-		forProject('umbra-minecraft', 'minecraft') {
-			artifactId 'umbra-minecraft'
-		}
 	}
 }

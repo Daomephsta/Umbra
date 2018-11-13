@@ -7,3 +7,10 @@ repositories {
 dependencies {
 	implementation 'com.google.guava:guava:21.0'
 }
+
+publishing {
+	publications {
+        create(archivesBaseName, MavenPublication) {
+        }
+    }
+}

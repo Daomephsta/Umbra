@@ -19,6 +19,16 @@ makeEclipseCleanRunServer.enabled = false
 version = "${rootProject.mcVersion}-${project.modVersion}"
 archivesBaseName = 'umbra-minecraft'
 
+publishing {
+    tasks.publish.mustRunAfter 'build'
+    tasks.publishToMavenLocal.mustRunAfter 'build'
+	publications {
+        create(archivesBaseName, MavenPublication) {
+            artifact "${buildDir}/${archivesBaseName}-${version}.jar"
+        }
+    }
+}
+
 minecraft {
 	version = rootProject.mcVersion + "-" + rootProject.forgeVersion
 	runDir = "run"

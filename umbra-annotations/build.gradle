@@ -32,3 +32,16 @@ task annotationsJar(type: Jar) {
 task processorsJar(type: Jar) {
 	from sourceSets.processors.output
 }
+
+publishing {
+	publications {
+        create('umbra-annotations', MavenPublication) {
+			artifact annotationsJar
+			artifactId 'umbra-annotations'
+		}
+		create('umbra-annotation-processing', MavenPublication) {
+			artifact processorsJar
+			artifactId 'umbra-annotation-processing'
+		}
+    }
+}
