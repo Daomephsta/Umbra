@@ -8,6 +8,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class NBTExtensions
@@ -69,5 +70,19 @@ public class NBTExtensions
 	private static <T extends Comparable<T>> String serialisePropertyValue(IProperty<T> property, Comparable<?> value)
 	{
 		return property.getName((T) value);
+	}
+	
+	public static BlockPos getPosition(NBTTagCompound nbt, String key)
+	{
+		int[] posTag = nbt.getIntArray(key);
+		int x = posTag[0],
+			y = posTag[1],
+			z = posTag[2];
+		return new BlockPos(x, y, z);
+	}
+	
+	public static void setPosition(NBTTagCompound nbt, String key, BlockPos pos)
+	{
+		nbt.setIntArray(key, new int[] {pos.getX(), pos.getY(), pos.getZ()});
 	}
 }
