@@ -11,4 +11,10 @@ public class Umbra
 	public static final String MODNAME = "Umbra";
 	public static final String MODID = "umbra";
 	public static final String VERSION = "0.0.1";
+	
+	@EventHandler
+	public static void preinit(FMLPreInitializationEvent event)
+	{
+		ActionScheduler.preinit();
+	}
 }
