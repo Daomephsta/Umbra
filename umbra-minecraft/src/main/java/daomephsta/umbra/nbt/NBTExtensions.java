@@ -2,11 +2,13 @@ package daomephsta.umbra.nbt;
 
 import java.util.Map.Entry;
 
+import com.google.common.collect.Iterables;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -84,5 +86,10 @@ public class NBTExtensions
 	public static void setPosition(NBTTagCompound nbt, String key, BlockPos pos)
 	{
 		nbt.setIntArray(key, new int[] {pos.getX(), pos.getY(), pos.getZ()});
+	}
+	
+	public static boolean contains(NBTTagList list, String target)
+	{
+		return Iterables.any(list, nbt -> nbt instanceof NBTTagString && ((NBTTagString) nbt).getString().equals(target));
 	}
 }
