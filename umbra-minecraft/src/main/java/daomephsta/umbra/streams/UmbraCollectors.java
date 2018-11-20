@@ -16,7 +16,7 @@ public class UmbraCollectors
 			throwingAccumulator(expectedClass), (a, b) ->
 			{
 				b.forEach(a::appendTag);
-				return b;
+				return a;
 			});
 	}
 	
