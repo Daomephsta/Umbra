@@ -85,7 +85,7 @@ public class ActionScheduler
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setTag("actions", scheduledActions.actionQueue.stream()
 				.map(a -> a.serializeNBT())
-				.collect(UmbraCollectors.NBT_LIST));
+				.collect(UmbraCollectors.toNBTList(NBTTagCompound.class)));
 			return nbt;
 		}
 
