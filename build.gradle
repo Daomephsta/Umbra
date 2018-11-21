@@ -9,7 +9,7 @@ subprojects {
     /* Don't set versions for projects like umbra-test that don't get 
      * published and hence don't have subVersions */
     if (project.hasProperty('subVersion'))
-        version = "${rootProject.mainVersion}-${project.subVersion}"
+        version = "${project.mainVersion}-${project.subVersion}"
 
 	sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 	compileJava {
