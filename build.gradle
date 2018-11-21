@@ -5,9 +5,19 @@ allprojects {
 subprojects {
 	apply plugin: 'java'
     apply plugin: 'maven-publish'
+    
+    /* Don't set versions for projects like umbra-test that don't get 
+     * published and hence don't have subVersions */
+    if (project.hasProperty('subVersion'))
+        version = "${rootProject.mainVersion}-${project.subVersion}"
 
 	sourceCompatibility = targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 	compileJava {
 		sourceCompatibility = targetCompatibility = '1.8'
 	}
+    
+    jar { 
+        if (project.hasProperty('subVersion'))
+            manifest.attributes 'Maven-Artifact': "${project.group}:${project.name}:${project.subVersion}"
+    }
 }

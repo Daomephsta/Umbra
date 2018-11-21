@@ -16,7 +16,6 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 //Disable run configuration generation, as Umbra is a library, not a mod
 makeEclipseCleanRunClient.enabled = false
 makeEclipseCleanRunServer.enabled = false
-version = "${rootProject.mcVersion}-${project.modVersion}"
 archivesBaseName = 'umbra-minecraft'
 
 publishing {
@@ -30,9 +29,9 @@ publishing {
 }
 
 minecraft {
-	version = rootProject.mcVersion + "-" + rootProject.forgeVersion
+	version = "${project.mcVersion}-${project.forgeVersion}"
 	runDir = "run"
-	mappings = rootProject.mappingsVer
+    mappings = mappingsVer
 	makeObfSourceJar = false
 }
 
