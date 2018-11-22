@@ -9,7 +9,7 @@ import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
-public class MappingAgnosticReflectionHelper
+public class SRGReflectionHelper
 {
 	private static final boolean IS_DEV = Launch.blackboard.containsKey("fml.deobfuscatedEnvironment");
 	
