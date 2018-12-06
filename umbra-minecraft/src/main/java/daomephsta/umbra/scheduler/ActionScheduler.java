@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import daomephsta.umbra.capabilities.CapabilityHelper;
 import daomephsta.umbra.internal.Umbra;
-import daomephsta.umbra.streams.UmbraCollectors;
+import daomephsta.umbra.streams.NBTCollectors;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -85,7 +85,7 @@ public class ActionScheduler
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setTag("actions", scheduledActions.actionQueue.stream()
 				.map(a -> a.serializeNBT())
-				.collect(UmbraCollectors.toNBTList(NBTTagCompound.class)));
+				.collect(NBTCollectors.toNBTList(NBTTagCompound.class)));
 			return nbt;
 		}
 

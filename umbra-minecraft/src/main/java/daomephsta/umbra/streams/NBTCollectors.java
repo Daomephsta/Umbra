@@ -1,6 +1,5 @@
 package daomephsta.umbra.streams;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -9,23 +8,22 @@ import java.util.stream.Collector;
 import com.google.common.base.Preconditions;
 
 import net.minecraft.nbt.*;
-import net.minecraft.util.NonNullList;
 
-public class UmbraCollectors
+public class NBTCollectors
 {
 	/**@author InsomniaKitten*/
 	public static <T extends NBTBase> Collector<Map.Entry<String, T>, ?, NBTTagCompound> toCompoundTag() {
-        return Collector.of(NBTTagCompound::new, (c, e) -> c.setTag(e.getKey(), e.getValue()), UmbraCollectors::merge);
+        return Collector.of(NBTTagCompound::new, (c, e) -> c.setTag(e.getKey(), e.getValue()), NBTCollectors::merge);
     }
 
 	/**@author InsomniaKitten*/
     public static <T extends NBTBase, K> Collector<Map.Entry<K, T>, ?, NBTTagCompound> toCompoundTag(final KeySupplier<K> keySupplier) {
-        return Collector.of(NBTTagCompound::new, (c, e) -> c.setTag(keySupplier.apply(e.getKey()), e.getValue()), UmbraCollectors::merge);
+        return Collector.of(NBTTagCompound::new, (c, e) -> c.setTag(keySupplier.apply(e.getKey()), e.getValue()), NBTCollectors::merge);
     }
 
     /**@author InsomniaKitten*/
     public static <T extends NBTBase, V> Collector<Map.Entry<String, V>, ?, NBTTagCompound> toCompoundTag(final Function<V, T> mappingFunction) {
-        return Collector.of(NBTTagCompound::new, (c, e) -> c.setTag(e.getKey(), mappingFunction.apply(e.getValue())), UmbraCollectors::merge);
+        return Collector.of(NBTTagCompound::new, (c, e) -> c.setTag(e.getKey(), mappingFunction.apply(e.getValue())), NBTCollectors::merge);
     }
 
     /**@author InsomniaKitten*/
@@ -34,13 +32,13 @@ public class UmbraCollectors
             final String k = keySupplier.apply(e.getKey());
             final T v = mappingFunction.apply(e.getValue());
             c.setTag(k, v);
-        }, UmbraCollectors::merge);
+        }, NBTCollectors::merge);
     }
     
 	public static <T extends NBTBase> Collector<T, ?, NBTTagList> toNBTList(Class<T> expectedClass)
 	{
 		return Collector.of(NBTTagList::new,
-			appendWithExpectedType(expectedClass), UmbraCollectors::merge);
+			appendWithExpectedType(expectedClass), NBTCollectors::merge);
 	}
 	
 	/**
@@ -86,15 +84,6 @@ public class UmbraCollectors
             l.appendTag(e);
         };
     }
- 
-	public static <I> Collector<I, ?, NonNullList<I>> toNonNullList()
-	{
-		return Collector.of(NonNullList::create, Collection::add, (a, b) ->
-		{
-			a.addAll(b);
-			return a;
-		});
-	}
 	
 	public interface KeySupplier<K> extends Function<K, String> {}
 }
