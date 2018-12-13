@@ -3,6 +3,8 @@ package daomephsta.umbra.scheduler;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -42,6 +44,7 @@ public class ActionRegistry
 		return nbt;
 	}
 	
+	@Nullable
 	public static IAction deserialiseAction(NBTTagCompound nbt)
 	{
 		ResourceLocation actionType = new ResourceLocation(nbt.getString("action_type"));
