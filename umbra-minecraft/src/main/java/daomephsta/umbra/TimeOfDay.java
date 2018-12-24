@@ -27,10 +27,10 @@ public enum TimeOfDay
 		this.ticks = ticks;
 		this.index = index;
 	}
-	
+
 	public static TimeOfDay byIndex(int index)
 	{
-		if(index < values().length) return BY_INDEX[index];
+		if (index < values().length) return BY_INDEX[index];
 		throw new IllegalArgumentException("No constant exists with the index " + index);
 	}
 
